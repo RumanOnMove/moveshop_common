@@ -25,7 +25,7 @@ module MoveshopCommon
         render json: { error: client.errors }, status: :unprocessable_entity
       end
     rescue StandardError => e
-      render json: { error: e.message }
+      render json: { error: e.message }, status: :unprocessable_entity
     end
 
     def update
@@ -37,7 +37,7 @@ module MoveshopCommon
         render json: { error: client.errors }, status: :unprocessable_entity
       end
     rescue StandardError => e
-      render json: { error: e.message }
+      render json: { error: e.message }, status: :unprocessable_entity
     end
 
     def destroy
