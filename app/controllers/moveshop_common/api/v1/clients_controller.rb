@@ -1,21 +1,33 @@
 module MoveshopCommon
-  class Api::V1::ClientsController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: [:create, :update, :destroy]
+  class Api::V1::ClientsController < MoveshopCommon::AuthController
+
+    before_action :authorize_admin, only: [:index, :create, :update, :destroy]
+
+    # List of OAuthClient
     def index
       clients = Client.all
       render json: { data: clients }, status: :ok
     end
 
+    # Show OAuthClient
     def show
       client = Client.find_by(id: params[:id])
 
       if client
-        render json: { data: client, message: 'Client retrieved successfully' }, status: :ok
+        data = {
+          name: client.name,
+          uid: client.uid,
+          secret: client.secret,
+          created_at: client.created_at,
+          updated_at: client.updated_at
+        }
+        render json: { client: data, message: 'Client retrieved successfully' }, status: :ok
       else
         render json: { message: 'Client not found' }, status: :not_found
       end
     end
 
+    # Create new OAuthClient
     def create
       client = Client.new(client_params)
 
@@ -28,6 +40,7 @@ module MoveshopCommon
       render json: { error: e.message }, status: :unprocessable_entity
     end
 
+    # Update OAuthClient
     def update
       client = Client.find_by(id: params[:id])
 
@@ -40,6 +53,7 @@ module MoveshopCommon
       render json: { error: e.message }, status: :unprocessable_entity
     end
 
+    # Remove OAuthClient
     def destroy
       client = Client.find_by(id: params[:id])
 
