@@ -1,7 +1,7 @@
 require "test_helper"
 
 module MoveshopCommon
-  class ClientsControllerTest < ActionDispatch::IntegrationTest
+  class Api::V1::ReviewsControllerTest < ActionDispatch::IntegrationTest
     include Engine.routes.url_helpers
 
     # test "the truth" do

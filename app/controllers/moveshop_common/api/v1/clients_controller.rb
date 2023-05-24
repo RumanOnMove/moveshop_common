@@ -1,5 +1,5 @@
 module MoveshopCommon
-  class ClientsController < ApplicationController
+  class Api::V1::ClientsController < ApplicationController
     skip_before_action :verify_authenticity_token, only: [:create, :update, :destroy]
     def index
       clients = Client.all

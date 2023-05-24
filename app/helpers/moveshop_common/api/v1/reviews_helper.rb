@@ -1,4 +1,4 @@
 module MoveshopCommon
-  module ClientsHelper
+  module Api::V1::ReviewsHelper
   end
 end

@@ -1,5 +1,5 @@
 module MoveshopCommon
-  class ReviewsController < ApplicationController
+  class Api::V1::ReviewsController < ApplicationController
     skip_before_action :verify_authenticity_token, only: [:create, :update, :destroy]
     def index
       reviews = Review.all
