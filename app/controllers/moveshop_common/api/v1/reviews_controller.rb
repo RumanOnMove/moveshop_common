@@ -4,7 +4,7 @@ module MoveshopCommon
     # List of Reviews
     def index
       reviews = Review.all
-      render json: { data: reviews }, status: :ok
+      render json: ReviewSerializer.new(reviews), status: :ok
     end
 
     # Show Review
@@ -19,41 +19,52 @@ module MoveshopCommon
 
     # Create Review
     def create
+      # Modify user input
       review_params = params.require(:review).permit(:product_id, :title, :description, :rating, :name, :email)
       review_params[:spree_product_id] = review_params.delete(:product_id) if review_params.key?(:product_id)
 
-      review = Review.new(review_params)
-      if review.save
-        render json: { data: review, message: 'Review created successfully' }, status: :created
+      exist_review = Review.where(spree_product_id: review_params[:spree_product_id]).where(email: review_params[:email]).first
+
+      # Ensuring that the user hasn't given a review earlier
+      if exist_review.present?
+        render json: { message: 'You have already submitted a review' }, status: :unprocessable_entity
       else
-        render json: { error: review.errors }, status: :unprocessable_entity
+        review = Review.new(review_params)
+        if review.save
+          render json: ReviewSerializer.new(review), message: 'Review created successfully', status: :created
+        else
+          render json: { error: review.errors }, status: :unprocessable_entity
+        end
       end
+
     rescue StandardError => e
       render json: { error: e.message }, status: :unprocessable_entity
     end
 
     # Update Review
     def update
-      review = Review.find_by(id: params[:id])
-
-      if review.update(review_params)
-        render json: { data: review, message: 'Review updated successfully' }, status: :ok
-      else
-        render json: { error: review.errors }, status: :unprocessable_entity
-      end
-    rescue StandardError => e
-      render json: { error: e.message }, status: :unprocessable_entity
+      render json: { message: 'Update features coming soon' }, status: :ok
+    #   review = Review.find_by(id: params[:id])
+    #
+    #   if review.update(review_params)
+    #     render json: ReviewSerializer.new(review), message: 'Review updated successfully', status: :ok
+    #   else
+    #     render json: { error: review.errors }, status: :unprocessable_entity
+    #   end
+    # rescue StandardError => e
+    #   render json: { error: e.message }, status: :unprocessable_entity
     end
 
     # Remove Review
     def destroy
-      review = Review.find_by(id: params[:id])
-
-      if review&.destroy
-        render json: { message: 'Review deleted successfully' }, status: :ok
-      else
-        render json: { error: 'Review not found or could not be deleted' }, status: :unprocessable_entity
-      end
+      render json: { message: 'Delete features coming soon' }, status: :ok
+      # review = Review.find_by(id: params[:id])
+      #
+      # if review&.destroy
+      #   render json: { message: 'Review deleted successfully' }, status: :ok
+      # else
+      #   render json: { error: 'Review not found or could not be deleted' }, status: :unprocessable_entity
+      # end
     end
 
     private

@@ -1,7 +1,7 @@
 module MoveshopCommon
   class Api::V1::ClientsController < MoveshopCommon::AuthController
-
-    before_action :authorize_admin, only: [:index, :create, :update, :destroy]
+    skip_before_action :verify_authenticity_token, only: [:index, :show, :create, :update, :destroy]
+    before_action :authorize_admin, only: [:index, :show, :create, :update, :destroy]
 
     # List of OAuthClient
     def index

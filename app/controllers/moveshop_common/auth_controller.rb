@@ -7,7 +7,7 @@ module MoveshopCommon
     def authorize_admin
       # Checking if the authenticated user is an admin
       unless spree_current_user
-        render json: { error: spree_current_user }, status: :unauthorized
+        render json: { error: 'The access token expired' }, status: :unauthorized
       end
     end
   end
