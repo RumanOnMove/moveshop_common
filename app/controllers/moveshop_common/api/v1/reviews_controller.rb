@@ -3,8 +3,27 @@ module MoveshopCommon
     skip_before_action :verify_authenticity_token, only: [:create, :update, :destroy]
     # List of Reviews
     def index
-      reviews = Review.all
-      render json: ReviewSerializer.new(reviews), status: :ok
+      # Get the filter parameters from the params hash
+      product_id = params[:product_id].presence
+      title = params[:title].presence
+      name = params[:name].presence
+      email = params[:email].presence
+
+      # Apply filters
+      reviews = Review.filter_by(product_id, title, name, email)
+
+      # Apply pagination using offset and limit
+      per_page = params[:per_page].to_i
+      page = params[:page].to_i
+      offset = (page  - 1)* per_page
+      paginated_reviews = reviews.limit(per_page).offset(offset)
+
+      render json: {
+        reviews: ReviewSerializer.new(paginated_reviews),
+        current_page: page,
+        total_pages: reviews.count/per_page,
+        total_items: reviews.count
+      }, status: :ok
     end
 
     # Show Review

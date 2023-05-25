@@ -13,5 +13,15 @@ module MoveshopCommon
     def product_id
       self.spree_product_id
     end
+
+    # Scope
+    scope :filter_by, -> (product_id = nil, title = nil, name = nil, email = nil) do
+      filter_params = {}
+      filter_params[:spree_product_id] = product_id if product_id.present?
+      filter_params[:title] = title if title.present?
+      filter_params[:name] = name if name.present?
+      filter_params[:email] = email if email.present?
+      where(filter_params)
+    end
   end
 end
