@@ -1,7 +1,7 @@
 require "test_helper"
 
 module MoveshopCommon
-  class ReviewTest < ActiveSupport::TestCase
+  class PropertyTest < ActiveSupport::TestCase
     # test "the truth" do
     #   assert true
     # end
